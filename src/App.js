@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from 'axios'
+import {useState,useEffect} from 'react'
+import { Data } from './Components/Data';
 
 function App() {
+
+  const [covidData, setCovidData]=useState([]);
+
+  // fetch api
+  const fetchApi=async()=>{
+    const response = await axios.get('https://api.covid19api.com/summary');
+    const data = await response.data.Countries;
+    // console.log(data);       
+    setCovidData(data);    
+  }
+
+  useEffect(()=>{
+    fetchApi();
+  },[])  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='container'>
+      <table className='table'>
+
+        <thead>
+          <tr>
+            <th scope="col">SNO</th>
+            <th scope="col">Country</th>
+            <th scope="col">Country Code</th>
+            <th scope="col">New Confirmed</th>
+            <th scope="col">Total Confirmed</th>
+            <th scope="col">New Deaths</th>
+            <th scope="col">Total Recovered</th>
+          </tr>          
+        </thead>
+
+        <tbody>
+         
+            <Data covidData={covidData}/>
+          
+        </tbody> 
+
+      </table>      
     </div>
   );
 }
